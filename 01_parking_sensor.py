@@ -44,7 +44,7 @@ def wait_for_echo(pin, value, timeout):
 def get_distance(trigger_pin, echo_pin):
     send_trigger_pulse(trigger_pin)
     # Wait for the echo pin to become True indicating that
-    # the pulse of ultrasound is on its way.
+    # the pulse of ultrasound has finished sending.
     wait_for_echo(echo_pin, True, 10000)
     # make a note of the time
     start = time.time()
