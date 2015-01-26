@@ -22,24 +22,39 @@ GPIO.setup(trigger_pin_right, GPIO.OUT)
 GPIO.setup(echo_pin_right, GPIO.IN)
 
 # These three functions encapsulate SR-04 range finder use
-# Send a trigger pulse, then see how long it takes to come back
+# Send a trigger pulse, using the pin supplied as a parameter
+# The pulse has a duration of 100 microseconds
 def send_trigger_pulse(pin):
     GPIO.output(pin, True)
     time.sleep(0.0001)
     GPIO.output(pin, False)
 
+# Wait for the echo pin (supplied as the first parameter) to
+# change to high or low as specified in the value parameter
+# The timeout parameter prevents the function from hanging, if
+# for any reason this doesn't happen
 def wait_for_echo(pin, value, timeout):
     count = timeout
     while GPIO.input(pin) != value and count > 0:
         count -= 1
 
+
+# Measure the distance in cm, using a rangefinder attached
+# to the two pins specified as parameters.
 def get_distance(trigger_pin, echo_pin):
     send_trigger_pulse(trigger_pin)
+    # Wait for the echo pin to become True indicating that
+    # the pulse of ultrasound is on its way.
     wait_for_echo(echo_pin, True, 10000)
+    # make a note of the time
     start = time.time()
+    # Wait for the echo to become False indicating that an
+    # obstacle has been detected
     wait_for_echo(echo_pin, False, 10000)
+    # See how long it took
     finish = time.time()
     pulse_len = finish - start
+    # Calculate the dsatnce using the speed of sound
     distance_cm = pulse_len / 0.000058
     return (int(distance_cm))
     
@@ -56,9 +71,12 @@ def colour_for_distance(distance):
     
 # Initialise PyGame window    
 pygame.init()
-size = width, height = 800, 600 # change this to change window size
+# Specify the Window size
+# change this to change window size
+size = width, height = 800, 600 
 offset = width / 8
 
+# Create the screen and a font for the text
 screen = pygame.display.set_mode(size)
 myfont = pygame.font.SysFont("monospace", 50)
 
@@ -70,7 +88,7 @@ while True:
             GPIO.cleanup() # set GPIO pins to be inputs
             sys.exit() # quit the program entirely
             
-    # Measure both distances    
+    # Measure the distances from both rangefinders   
     left_distance = get_distance(trigger_pin_left, echo_pin_left)
     right_distance = get_distance(trigger_pin_right, echo_pin_right)
     
@@ -85,6 +103,8 @@ while True:
     right_label = myfont.render(str(right_distance)+" cm", 1, black)
     screen.blit(right_label, (width/2 + offset + 10, height/2))
     
+    # Update the display and wait 1/10 second so that is doesn't refresh too fast
+    # to read the numbers
     pygame.display.update()
     time.sleep(0.1)
 
