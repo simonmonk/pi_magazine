@@ -35,7 +35,7 @@ def new_item():
     # Get the password entered in the password field of the form
     pwd = request.POST.get('password', '').strip()
     # check to see if tehre have been too many failed attemts
-    if attempts > MAX_ATTEMPTS:
+    if attempts >= MAX_ATTEMPTS:
         return template('lockout.tpl')
     # unlock the door if the password is correct
     if pwd == PASSWORD:
