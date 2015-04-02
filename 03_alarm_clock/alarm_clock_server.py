@@ -32,23 +32,7 @@ alarm_time = ''
 def set_angle(angle):
     duty = float(angle) / 10.0 + 2.5
     pwm.ChangeDutyCycle(duty)
-
-# Handler for the home page
-@route('/')
-def index(name='time'):
-    return template('home.tpl')
-
-# Handler for the 'conformation' page
-@route('/setconfirmation', method='POST')
-def new_item():
-    global alarm_time, alarm_on
-    # Get the time entered in the time form
-    alarm_time = request.POST.get('alarm_time', '')
-    alarm_on = True
-    # Go to the conformation page
-    return template('setconfirmation.tpl', t=alarm_time)
-        
-
+    
 def bong():
     set_angle(START_ANGLE)
     time.sleep(DELAY_IN)
@@ -69,6 +53,24 @@ def update_display():
     segment.writeDigit(4, minute % 10)        # Ones
     # Toggle colon
     segment.setColon(second % 2)              # Toggle colon at 1Hz
+
+# Handler for the home page
+@route('/')
+def index(name='time'):
+    return template('home.tpl')
+
+# Handler for the 'conformation' page
+@route('/setconfirmation', method='POST')
+def confirm():
+    global alarm_time, alarm_on
+    # Get the time entered in the time form
+    alarm_time = request.POST.get('alarm_time', '')
+    alarm_on = True
+    # Go to the conformation page
+    return template('setconfirmation.tpl', t=alarm_time)
+        
+
+
 
 def update(thread_name):
     global alarm_on, alarm_time
