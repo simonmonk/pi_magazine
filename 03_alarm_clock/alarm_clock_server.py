@@ -30,8 +30,11 @@ alarm_time = ''
 
 # Set the servo to the angle specified
 def set_angle(angle):
-    duty = float(angle) / 10.0 + 2.5
-    pwm.ChangeDutyCycle(duty)
+    if angle < 1.0:
+        pwm.ChangeDutyCycle(0) # stop servo jitter when not banging
+    else:
+        duty = float(angle) / 10.0 + 2.5
+        pwm.ChangeDutyCycle(duty)
     
 def bong():
     set_angle(START_ANGLE)
