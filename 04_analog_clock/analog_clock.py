@@ -1,22 +1,26 @@
 import time
 import RPi.GPIO as GPIO
 
-PULSE_LEN = 0.03
-A_PIN = 18
-B_PIN = 23
-# BUTTON_PIN = 24
+# Constants
+PULSE_LEN = 0.03 # length of clock motor pulse
+A_PIN = 18       # one motor drive pin
+B_PIN = 23       # second motor drive pin
+BUTTON_PIN = 24
 
 # Configure the GPIO pins
 GPIO.setmode(GPIO.BCM)
-# GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(A_PIN, GPIO.OUT)
 GPIO.setup(B_PIN, GPIO.OUT)
 
 # Glogal variables
 positive_polarity = True
+period = 1.0          # defau;s tick period of 1 second
+last_tick_time = 0    # the time at which last tick occured
 
 def tick():
 	# Alternate positive and negative pulses
+	global positive_polarity
 	if positive_polarity:
 		pulse(A_PIN, B_PIN)
 	else:
@@ -34,8 +38,16 @@ def pulse(pos_pin, neg_pin):
 
 try:
 	while True:
-		tick()
-		time.sleep(1)
+		t = time.time()
+		if t > last_tick_time + period:
+			# its time for the next tick
+			tick()
+			last_tick_time = t
+		if GPIO.input(BUTTON_PIN) == False:
+			# the button is pressed
+			period = 0.2
+		else:
+			period = 1.0
 finally:
     print('Cleaning up GPIO')
     GPIO.cleanup()
