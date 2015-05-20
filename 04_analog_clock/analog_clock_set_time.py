@@ -15,7 +15,7 @@ GPIO.setup(B_PIN, GPIO.OUT)
 
 # Glogal variables
 positive_polarity = True
-period = 1.0          # default tick period of 1 second
+period = 1000000000.0 # default tick virtually infinate (ready to set)
 last_tick_time = 0    # the time at which last tick occured
 
 def tick():
@@ -35,6 +35,15 @@ def pulse(pos_pin, neg_pin):
 	time.sleep(PULSE_LEN)
 	# Turn the power off until the next tick
 	GPIO.output(pos_pin, False)
+    
+def set_time():
+    # quickly tick the number of seconds from midnight to the current time
+    seconds_per_day = 60 * 60 * 24
+    ticks = 0
+    while ticks < (time.time() - int(time.time()/seconds_per_day) * seconds_per_day):
+        tick()
+        ticks += 1
+        time.sleep(0.2)
 
 try:
 	while True:
@@ -44,10 +53,7 @@ try:
 			tick()
 			last_tick_time = t
 		if GPIO.input(BUTTON_PIN) == False:
-			# the button is pressed
-			period = 0.2
-		else:
-			period = 1.0
+			set_time()
 finally:
     print('Cleaning up GPIO')
     GPIO.cleanup()
