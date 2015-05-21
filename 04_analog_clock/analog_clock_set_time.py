@@ -38,6 +38,7 @@ def pulse(pos_pin, neg_pin):
     
 def set_time():
     # quickly tick the number of seconds from midnight to the current time
+    global period, last_tick_time
     now = datetime.datetime.now()
     midnight = now.replace(hour=0, minute=0, second=0)
     ticks = 0
