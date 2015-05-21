@@ -40,10 +40,12 @@ def set_time():
     # quickly tick the number of seconds from midnight to the current time
     seconds_per_day = 60 * 60 * 24
     ticks = 0
+	print((time.time() - int(time.time()/seconds_per_day) * seconds_per_day))
     while ticks < (time.time() - int(time.time()/seconds_per_day) * seconds_per_day):
         tick()
         ticks += 1
         time.sleep(0.2)
+	period = 1.0
 
 try:
 	while True:
