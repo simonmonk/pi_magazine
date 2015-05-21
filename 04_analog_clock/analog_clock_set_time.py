@@ -46,7 +46,8 @@ def set_time():
         tick()
         ticks += 1
         time.sleep(0.1)
-	period = 1.0
+    period = 1.0
+    last_tick_time = 0    
 
 try:
 	while True:
