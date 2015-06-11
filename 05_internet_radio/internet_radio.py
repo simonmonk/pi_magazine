@@ -1,3 +1,5 @@
+
+
 from oled.device import ssd1306, sh1106
 from oled.render import canvas
 from PIL import ImageFont
@@ -46,6 +48,7 @@ def display_message(top_line, line_2, line_3=''):
         draw.text((0, 50),  line_3, font=small_font, fill=255)
 
 try:
+    mpc.play(current_station)
     while True:
         num_stations = int(mpc.status()['playlistlength'])
         if num_stations == 0:
