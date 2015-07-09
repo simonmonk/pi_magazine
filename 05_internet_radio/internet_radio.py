@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python
 
 from oled.device import ssd1306, sh1106
 from oled.render import canvas
