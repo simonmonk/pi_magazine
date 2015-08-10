@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import time
 from neopixel import *
 import RPi.GPIO as GPIO
