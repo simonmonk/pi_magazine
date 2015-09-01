@@ -83,7 +83,7 @@ def update(thread_name):
         # Bong for as long as the alaem is on and its the right minute
         if current_time == alarm_time and alarm_on:
             bong()
-        # Check for the alamr cancel button
+        # Check for the alarm cancel button
         if GPIO.input(BUTTON_PIN) == False:
             alarm_on = False
             set_angle(0)
