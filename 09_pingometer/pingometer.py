@@ -9,8 +9,6 @@ GOOD_PING = 0.1   # seconds
 OK_PING = 0.3     # seconds
 
 SERVO_PIN = 25 # control pin of servo
-squid = Squid(18, 23, 24)
-
 MIN_ANGLE = 30
 MAX_ANGLE = 150
 
@@ -20,6 +18,7 @@ GPIO.setup(SERVO_PIN, GPIO.OUT)
 pwm = GPIO.PWM(SERVO_PIN, 100) # start PWM at 100 Hz
 pwm.start(0)
 
+squid = Squid(18, 23, 24)
 
 def map_ping_to_angle(ping_time):
     # ping timeout of 1000 ms sets maximum
@@ -45,20 +44,21 @@ def ping(hostname):
         return float(output.split('/')[5]) / 1000.0
     except:
         return -1
-        
-while True:
-    p = ping(HOSTNAME)
-    # p = input("ping=")  # Use for testing
-    print(p)
-    set_angle(map_ping_to_angle(p))
-    if p == -1 :
-        squid.set_color(BLUE)
-    elif p < GOOD_PING:
-        squid.set_color(GREEN)
-    elif p < OK_PING:
-        squid.set_color((50, 15, 0)) # Orange
-    else:
-        squid.set_color(RED)
-    time.sleep(PING_PERIOD)
-    
+try:        
+	while True:
+    	p = ping(HOSTNAME)
+    	# p = input("ping=")  # Use for testing
+    	print(p)
+    	set_angle(map_ping_to_angle(p))
+    	if p == -1 :
+        	squid.set_color(BLUE)
+    	elif p < GOOD_PING:
+        	squid.set_color(GREEN)
+    	elif p < OK_PING:
+        	squid.set_color((50, 15, 0)) # Orange
+    	else:
+        	squid.set_color(RED)
+    	time.sleep(PING_PERIOD)
+finally:
+	GPIO.cleanup()    
     
