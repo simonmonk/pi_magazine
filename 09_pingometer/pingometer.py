@@ -44,12 +44,13 @@ def ping(hostname):
         return float(output.split('/')[5]) / 1000.0
     except:
         return -1
+
 try:
-	while True:
+    while True:
         p = ping(HOSTNAME)
-    	# p = input("ping=")  # Use for testing
-    	print(p)
-    	set_angle(map_ping_to_angle(p))
+        # p = input("ping=")  # Use for testing
+        print(p)
+        set_angle(map_ping_to_angle(p))
     	if p == -1 :
         	squid.set_color(BLUE)
     	elif p < GOOD_PING:
