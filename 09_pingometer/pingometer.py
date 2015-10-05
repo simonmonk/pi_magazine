@@ -44,9 +44,9 @@ def ping(hostname):
         return float(output.split('/')[5]) / 1000.0
     except:
         return -1
-try:        
+try:
 	while True:
-    	p = ping(HOSTNAME)
+        p = ping(HOSTNAME)
     	# p = input("ping=")  # Use for testing
     	print(p)
     	set_angle(map_ping_to_angle(p))
@@ -60,5 +60,5 @@ try:
         	squid.set_color(RED)
     	time.sleep(PING_PERIOD)
 finally:
-	GPIO.cleanup()    
+	GPIO.cleanup()
     
