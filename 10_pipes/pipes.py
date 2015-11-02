@@ -1,4 +1,3 @@
-import os
 import glob
 import time
 import urllib, urllib2
@@ -9,7 +8,7 @@ EVENT = 'pipe_alert'
 BASE_URL = 'https://maker.ifttt.com/trigger/'
 KEY = 'cyR3vPNFlP9K32W4NZB9cd'  # Place your own key here
 
-# There paramewters used by the 1-wire device
+# These constants used by the 1-wire device
 base_dir = '/sys/bus/w1/devices/'
 device_folder = glob.glob(base_dir + '28*')[0]
 device_file = device_folder + '/w1_slave'
@@ -47,9 +46,5 @@ while True:
     temp = read_temp()
     print(temp)
     if temp < ALARM_TEMP:
-        last_warning_time = time.time()
         send_notification(temp)
-        while time.time() < last_warning_time + MIN_T_BETWEEN_WARNINGS*60:
-            time.sleep(0.1)
-
-        
+        time.sleep(MIN_T_BETWEEN_WARNINGS * 60)
