@@ -1,6 +1,5 @@
 from bottle import route, run, template, request
 import os
-import time
 
 ID = 'B0 A1 56'
 MIDDLE = ' 06 C9 '
@@ -21,7 +20,7 @@ def light_off(zone):
     send(ZONES[zone]['off'])
 
 def send(code):
-    global ser_num, ID, MIDDLE
+    global ID, MIDDLE
     for i in range(1, 5):
         message = ID + MIDDLE + code + ' 00'
         os.system('./send_cmd "' + message + '"')
